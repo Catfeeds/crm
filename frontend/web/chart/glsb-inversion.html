@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="-1">
+    <title>转化漏斗</title>
+    <link rel="stylesheet" type="text/css" href="css/swiper.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-default/index.css">
+</head>
+<body>
+<div class="overflow none" id="overflow"></div>
+<section class="main">
+    <div class="filterbox">
+        <div class="channelbox">
+           <div class="input-wrapper">
+               <div class="channelinput">
+                   <input type="button" value="渠道来源" readonly>
+                   <span class="chevron-down"></span>
+               </div>
+           </div>
+           <ul class="none">
+           </ul>
+        </div>
+        <div class="storebox">
+           <div class="input-wrapper">
+               <div class="storeinput">
+                   <div class="col-md-8"  id="orgSelect">
+                         <el-cascader
+                           placeholder="区域和门店"
+                           :options="options"
+                           @change = "handlechange"
+                         ></el-cascader>
+                         <input id="shopid" name="shop_id" type="hidden" value="">
+                     </div>
+               </div>
+           </div>
+        </div>
+        <div class="timebox">
+           <div class="input-wrapper">
+               <div class="timeinput">
+                   <input class="datetime yearmonth" type="button" value="" readonly>
+                   <span class="chevron-down"></span>
+               </div>
+           </div>
+           <div class="time-yearmonth timelist none">
+              <a class="prev" href="javascript:;"><img src="img/ic_arrowleft.png"></a>
+              <a class="next" href="javascript:;"><img src="img/ic_arrowright.png"></a>
+              <div class="date-list">
+                  <div class="swiper-container">
+                      <div class="swiper-wrapper">
+                      </div>
+                  </div>
+              </div>
+           </div>
+        </div>
+    </div>
+
+    <div class="chart_box">
+        <div class="chart">
+            <div id="Risk" style="height:350px;width:100%;text-align:center;"></div>
+        </div>
+    </div>
+</section>
+<script type="text/javascript" src="js/zepto.min.js"></script>
+<script type="text/javascript" src="js/echarts.min.js" ></script>
+<script type="text/javascript" src="js/swiper-3.4.2.jquery.min.js" ></script>
+<script type="text/javascript" src="js/common.js" ></script>
+<!-- 先引入 Vue -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+ <!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script> 
+<script type="text/javascript">
+$(function () {
+    var myChart = echarts.init(document.getElementById('Risk'));
+    var token=null,os_type=null,level=null,p=null,r=null;
+    /*var r = JSON.stringify({"access_token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjI4MiwiaXNzIjoiaHR0cDpcL1wvdGVzdC5xeC1hcGkuY2hlY2hlbmcubmV0XC9hcGlcL3VzZXJzXC9sb2dpbiIsImlhdCI6MTQ5NjI5NjIxNywiZXhwIjoxNDk3ODA4MjE3LCJuYmYiOjE0OTYyOTYyMTcsImp0aSI6IjI2MjgwZjAwNTUyZmM2MmFhNzY3OWJiMzM5YjRiNzYzIn0.S7JmKUkeNgWxDC3ryhtF1m8D37Ti2DKmUa_VysLKL24","os_type":"android"});
+    p =JSON.stringify({
+        "info_owner_id":'',
+        "input_type_id":'',
+        "month":'2017-5'
+    });*/
+
+        if(GetQueryString("platfrom") == 'ios'){
+            goods.ready(function(bridge) {
+                goods.tocken({"text":document.title},function(param){
+                    token = param["tocken"];
+                    level = param["level"];
+                    os_type = GetQueryString("platfrom");
+                    r = JSON.stringify({"access_token":token,"os_type":os_type});
+                    tbjson(false);
+                });
+            });
+
+        }else{
+            token = window.JavaJs.token();
+            os_type = window.JavaJs.getOsType();
+            level = window.JavaJs.getLevelId();
+            r = JSON.stringify({"access_token":token,"os_type":os_type});
+            tbjson(false);
+        }
+  /*
+    *调用方法
+    *@dataurl 为接口数据地址
+  */
+  //门店选择
+  $.get('/get-json-data-for-select/index?type=getOrgInfo', {r:r,p:p}, function(jsonData){
+        new Vue({
+            el: '#orgSelect',
+            data:function(){
+                return {
+                    formInline:{
+                        desc:[]
+                    },
+                    options : jsonData
+                };
+            },
+            methods: {
+                handlechange:function(value){
+                    $("#shopid").val(value);
+                    tbjson(true);
+                }
+            }
+        });
+  }, 'json');
+
+      //筛选后图表的数据
+      function tbjson(a){
+        var url ="",channel="";
+        if(a){
+            url = sxchange(true,true,true);
+            if(url[0] != "" && url[1] != ""){
+              channel = url[0];
+            }else if(url[0] != "" && url[1] == ""){
+              channel = url[0];
+            }else if(url[0] == "" && url[1] != ""){
+              channel = 0;
+            }else{
+              channel = 0;
+            }
+            p = JSON.stringify({
+                  "input_type_id":channel,
+                  "info_owner_id":$("#shopid").val(),
+                  "month":url[1]
+                });
+        }
+
+      $.post("/glsb/customer-analysis/conversion-funnel",{r:r,p:p},function(response){
+          var option = funnel('option',response);
+              myChart.setOption(option);
+        },'json');
+      }
+
+      $("body").delegate(".channelbox li a","click",function(){
+         setTimeout(function() {tbjson(true);},300);
+      });
+
+      $("body").delegate(".cascader-menu li","click",function(){
+          if(!$(this).hasClass("submenu")){
+            setTimeout(function() {tbjson(true);},300);
+          }
+      });
+
+      $("body").delegate(".date-list .swiper-slide a","click",function(){
+         setTimeout(function() {tbjson(true);},300);
+      });
+
+$("body").delegate(".el-cascader","click",function(){
+    if($(".el-cascader").hasClass("is-opened"))
+    {
+      $(".el-cascader").parent().siblings().find("ul").addClass("none");
+      $(".el-cascader").parent().siblings().find(".timelist").addClass("none");
+      $(".el-cascader").siblings().removeClass("none");
+    }
+});
+
+      $(window).resize(function(){
+          myChart.resize();
+      });
+});
+</script>
+</body>
+</html>

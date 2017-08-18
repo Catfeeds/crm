@@ -1,0 +1,524 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<meta http-equiv="Expires" content="-1">
+		<link rel="stylesheet" type="text/css" href="base/reset.css" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/shopCalculator.css" rel="stylesheet" />
+		<link href="css/mui.picker.css" rel="stylesheet" />
+		<link href="css/mui.poppicker.css" rel="stylesheet" />
+		<style>
+			.mui-pciker-list li{
+				font-size: 12px;
+			}
+		</style>
+		<script src="base/jquery-1.10.2.min.js"></script>
+		
+	</head>
+
+	<body>
+		<!--<header class="mui-bar mui-bar-nav">-->
+			<!--<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><span>返回</span></a>-->
+			<!--<h1 class="mui-title">购车计算器</h1>-->
+		<!--</header>-->
+		<div class="mui-content">
+			<div class="car-pay clearfix">
+				<div class="car-first-pay car_first_pay">
+					<p>购车总价(元)</p>
+					<p class="hide">全款总花费(元)</p>
+					<p class="first-price" id="sum_price">0</p>
+					
+				</div>
+				<div class="car-by-stages car_by_stages" id="by_stages" style="display: none;">
+					<div>
+						<p>月供(元)</p>
+						<span id="monthPay">0</span>
+					</div>
+
+					<div>
+						<p>利息(元)</p>
+						<span id="interest">0</span>
+					</div>
+
+					<div>
+						<p>贷款首付(元)</p>
+						<span id="prepayment">0</span>
+					</div>
+				</div>
+			</div>
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" id="carBrandOpen">
+					<a class="mui-navigate-right">品牌车型
+						<p id="carBrand">请选择品牌</p>
+					</a>
+				</li>
+				<li class="mui-table-view-cell" id="carNameOpen">
+					<a class="mui-navigate-right">选择车型
+						<p id="carName">请选择车型</p>
+					</a>
+				</li>
+				<li class="mui-table-view-cell">
+					车城参考价
+					<p class="colorRed"><span id="carReferencePrice">0</span>元</p>
+					<input type="text" id="carReferencePriceChange" class="hide" />
+
+					<span class="mui-icon mui-icon-compose" id="changePrice"></span>
+				</li>
+				<li class="mui-table-view-cell">
+					指导价格
+					<p><span id="marketPrice">0</span>元</p>
+				</li>
+			</ul>
+
+			<ul class="mui-table-view ">
+				<li class="mui-table-view-cell" id="payFunctionOpen">
+					<a class="mui-navigate-right">付款方式
+						<p id="payFunction" dataRate='1' dataMmonthly='0'>选择付款方式</p>
+					</a>
+				</li>
+				<li class="mui-table-view-cell carloanInfo hide" id="loanYearsOpen">
+					<a class="mui-navigate-right">还款周期
+						<p id="loanYears" datavalue="1">12期</p>
+						<!--datavalue  1为1年12期  2为24期  3为26期-->
+					</a>
+				</li>
+				<li class="mui-table-view-cell hide" id="rateInterest">
+					还款年利率
+					<p class="colorRed"><span id="referenceInterest">0.0485</span></p>
+					<input type="text" id="referenceInterestChange" class="hide" />
+
+					<span class="mui-icon mui-icon-compose" id="refundPrice"></span>
+				</li>
+			</ul>
+
+			<ul class="mui-table-view fundamental-cost">
+				<li class="mui-table-view-cell mui-collapse">
+					<a class="mui-navigate-right" href="#">基本费用
+						<span class="pay-num"><span id="fundamental">0</span>元</span>
+					</a>
+					<div class="mui-collapse-content">
+						<ul class="">
+							<li class="">
+								购置税<span class="pay-num"><span id="purchaseTax">0</span>元</span>
+							</li>
+							<li class="">
+								消费税<span class="pay-num"><span id="consumption">0</span>元</span>
+							</li>
+							<li class="">
+								上牌费<span class="pay-num"><span id="registration">500</span>元</span>
+							</li>
+							<li id="usageTaxopen">
+								车船税<span class="pay-num"><span id="usageTax" datavalue="0" >0</span>元</span>
+								<a class="mui-icon mui-icon-arrowright"></a>
+							</li>
+							<li id="trafficInsuranceOpen">
+								交强险<span class="pay-num"><span id="trafficInsurance" datavalue="5">0</span>元</span>
+								<a class="mui-icon mui-icon-arrowright"></a>
+							</li>
+						</ul>
+
+					</div>
+				</li>
+			</ul>
+
+			<ul class="mui-table-view fundamental-cost business">
+				<li class="mui-table-view-cell mui-collapse">
+					<a class="mui-navigate-right" href="#">商业保险
+						<span class="pay-num"><span id="commercial">0</span>元</span>
+					</a>
+					<div class="mui-collapse-content">
+						<ul class="" id="business_cost">
+							<li>
+								<span class="mui-icon mui-icon-checkmarkempty active fatherSpan"></span>第三者责任险
+								<span class="pay-num" id="thirdInsuranceOpen"><span id="thirdInsurance" datavalue="500000" dataoff="true">0</span>元</span>
+								<a class="mui-icon mui-icon-arrowright" ></a>
+							</li>
+							<li class="">
+								<span class="mui-icon mui-icon-checkmarkempty active"></span>车辆损失险
+								<span class="pay-num"><span id="damageInsurance" dataoff="true">0</span>元</span>
+							</li>
+							<li class="">
+								<span class="mui-icon mui-icon-checkmarkempty active"></span>全车盗抢险
+								<span class="pay-num"><span id="stolenInsurance" dataoff="true">0</span>元</span>
+							</li>
+
+							<li class="">
+								<span class="mui-icon mui-icon-checkmarkempty active"></span>玻璃单独破碎险
+								<span class="pay-num"><span id="glassInsurance" dataoff="true">0</span>元</span>
+							</li>
+							<li class="">
+								<span class="mui-icon mui-icon-checkmarkempty active"></span>自燃损失险
+								<span class="pay-num"><span id="combustInsurance" dataoff="true">0</span>元</span>
+							</li>
+							<li class="">
+								<span class="mui-icon mui-icon-checkmarkempty active childenSpan" dataClass="s2"></span>不计免赔特约险
+								<span class="pay-num"><span id="noDeductibleInsurance" dataoff="true">0</span>元</span>
+							</li>
+							<li class="">
+								<span class="mui-icon mui-icon-checkmarkempty active childenSpan" dataClass=s2></span>无过责任险
+								<span class="pay-num"><span id="noLiabilityInsurance" dataoff="true">0</span>元</span>
+							</li>
+							<li class="" >
+								<span class="mui-icon mui-icon-checkmarkempty active"></span>车身划痕险
+								<span class="pay-num" id="carBodyInsuranceOpen"><span id="carBodyInsurance" dataoff="true">0</span>元</span>
+								<a class="mui-icon mui-icon-arrowright"></a>
+							</li>
+
+						</ul>
+
+					</div>
+				</li>
+			</ul>
+
+		</div>
+		<p style="font-size: 12px;text-align: center;">此结果仅供参考，实际费用以当地缴费为准</p>
+		<script src="js/mui.min.js"></script>
+		<script src="js/mui.picker.js"></script>
+		<script src="js/mui.poppicker.js"></script>
+		<script type="text/javascript">
+			(function($, doc, $$) {
+				$.init();
+				//var apiUrl = "testapi.che.com/che-agent"; //接口域名
+				var apiUrl = "api.che.com"; //接口域名
+
+				var sumCarData = {
+					carNumlis: [],
+					pitchdata: {},
+
+				}
+				var carReferencePrice = $$('#carReferencePrice'), //车城价格
+					marketPrice = $$('#marketPrice'),
+					QpayFunction = $$('#payFunction'); //市场价格
+
+				//汽车列表picker
+				var carBrandOpenObj = new $.PopPicker({
+					layer: 3
+				});
+
+				//列表请求
+				$$.ajax({
+					url: 'http://' + apiUrl + '/brand/brandList',
+					type: 'get',
+					dataType: "jsonp",
+					success: function(data) {
+						console.log(data);
+						if(data.resultCode == 0) {
+							var carResult = data.resultMap;
+							//第一次遍历
+							$$.each(carResult, function(key, val) {
+								var nowChildren = [];
+								$$.each(val, function(key, val) {
+									var nowChildren1 = []
+									$$.each(val.seriesResponseList, function(key, val) {
+										nowChildren1.push({
+											value: val.id,
+											text: val.name
+										})
+									})
+									nowChildren.push({
+										value: val.brandId,
+										text: val.brandName,
+										children: nowChildren1
+									})
+								})
+								sumCarData.carNumlis.push({
+									value: key,
+									text: key,
+									children: nowChildren
+								})
+							})
+
+							carBrandOpenObj.setData(sumCarData.carNumlis);
+
+						} else {
+							alert('网络延时');
+						}
+					}
+				});
+				//具体车型查找
+				var carNameOpenObj = new $.PopPicker({});
+				var carBrandOpen = doc.getElementById('carBrandOpen');
+				var carBrand = doc.getElementById('carBrand');
+				carBrandOpen.addEventListener('tap', function(event) {
+					carBrandOpenObj.show(function(items) {
+						carBrand.innerHTML = ((items[1] || {}).text + " " + (items[2] || {}).text);
+						sumCarData.pitchdata = { brandId: (items[1] || {}).value, id: (items[2] || {}).value };
+						//carBrand.innerText = "你选择的城市是:" + (items[0] || {}).text + " " + (items[1] || {}).text + " " + (items[2] || {}).text;
+						//返回 false 可以阻止选择框的关闭
+						//return false;
+
+						$$.ajax({
+							url: 'http://' + apiUrl + '/carInfo/searchCarInfoList',
+							type:'get',
+							dataType:"jsonp",
+							data: {
+								brandId: sumCarData.pitchdata.brandId,
+								seriesId: sumCarData.pitchdata.id,
+								pageSize: 100,
+							},
+							success: function(data) {
+								var resultData = data.response.newCarSellList;
+								var leadData = [];
+								$$.each(resultData, function(key, val) {
+									leadData.push({
+										value: val,
+										text: val.goodsName
+									})
+								})
+								carNameOpenObj.setData(leadData);
+								$$('#carName').text('请选择车型');
+								carReferencePrice.text(0);
+								marketPrice.text(0);
+							}
+						})
+					});
+				}, false);
+		
+				
+				//选择车辆
+				var carNameOpen = doc.getElementById('carNameOpen');
+				var carName = doc.getElementById('carName');
+				carNameOpen.addEventListener('tap', function(event) {
+					carNameOpenObj.show(function(items) {
+						if(items[0].text) {
+							carName.innerText = items[0].text;
+							carReferencePrice.text(items[0].value.currentPrice);
+							marketPrice.text(items[0].value.marketPrice);
+//							$$.ajax({
+//								url: 'http://' + apiUrl + '/carInfo/carInfoDetail',
+//								type: 'get',
+//								dataType:"jsonp",
+//								data:{
+//									goodsId: items[0].value.modelIdString
+//								},
+//								success: function(data) {
+//									var resultData = data.loanSchemeList;
+//									var leadData = [{ value: false, text: '全款购车' }]
+//									$$.each(resultData, function(key, val) {
+//										leadData.push({ value: val, text: val.name });
+//									})
+//
+//								}
+//							});
+						}
+					});
+				}, false);
+				//选择贷款方式
+				
+				var payFunctionOpenObj = new $.PopPicker({
+					layer:2
+				});
+					payFunctionOpenObj.setData([
+						{ value: false,
+						  text: '全款购车' ,
+					   	 children: [{
+					   	  	value: 1,
+						  	text:'全款购车'
+					   	  }]
+						},
+						 {value: true,
+						  text: '贷款购车', 
+					   	  children:[{
+					   	  	value: 0.3,
+						  	text: '首付额度30%'
+					   	  },{
+					   	  	value: 0.4,
+						  	text: '首付额度40%'
+					   	  },{
+					   	  	value: 0.5,
+						  	text: '首付额度50%'
+					   	  },{
+					   	  	value: 0.6,
+						  	text: '首付额度60%'
+					   	  },]
+						}
+					]);
+				var payFunctionOpen = doc.getElementById('payFunctionOpen');
+				var payFunction = doc.getElementById('payFunction');
+				payFunctionOpen.addEventListener('tap', function(event) {
+					payFunctionOpenObj.show(function(items) {
+						if(items[0].value){
+							$$('.carloanInfo').show();
+							$$('#by_stages').show();
+							$$('#rateInterest').show();
+							
+							
+						}else{
+							$$('.carloanInfo').hide();
+							$$('#by_stages').hide();
+							$$('#rateInterest').hide();
+						}
+								payFunction.innerHTML = items[1].text;
+								$$(payFunction).attr('datarate',items[1].value);						
+						
+					});
+
+				}, false);
+
+				//picker
+				$.ready(function() {
+					//车身划痕
+					var carBodyInsuranceOpenobj = new $.PopPicker();
+					carBodyInsuranceOpenobj.setData([
+						{
+						value: '2000',
+						text: '2千'
+					},{
+						value: '5000',
+						text: '5千'
+					},{
+						value: '10000',
+						text: '1万'
+					}, {
+						value: '20000',
+						text: '2万'
+					}]);
+					var carBodyInsuranceOpen = doc.getElementById('carBodyInsuranceOpen');
+					var carBodyInsurance = doc.getElementById('carBodyInsurance');
+					carBodyInsuranceOpen.addEventListener('tap', function(event) {
+						carBodyInsuranceOpenobj.show(function(items){
+							carBodyInsurance.setAttribute('datavalue', items[0].value);
+							//							carCostParam.loanYears = items[0].value;
+							//							console.log(carCostParam);
+							//返回 false 可以阻止选择框的关闭
+							//return false;
+
+						});
+					}, false);
+					
+					
+					
+					//贷款期数
+					var loanYearsOpenobj = new $.PopPicker();
+					loanYearsOpenobj.setData([
+						{
+						value: {howYear:5,rateInterest:0.0525},
+						text: '60期'
+					},{
+						value: {howYear:4,rateInterest:0.0525},
+						text: '48期'
+					},{
+						value: {howYear:3,rateInterest:0.0525},
+						text: '36期'
+					}, {
+						value: {howYear:2,rateInterest:0.0525},
+						text: '24期'
+					}, {
+						value: {howYear:5,rateInterest:0.0485},
+						text: '12期'
+					}]);
+					var showUserPickerButton = doc.getElementById('loanYearsOpen');
+					var loanYears = doc.getElementById('loanYears');
+					var referenceInterest = doc.getElementById('referenceInterest');
+					showUserPickerButton.addEventListener('tap', function(event) {
+						loanYearsOpenobj.show(function(items) {
+							loanYears.innerHTML = items[0].text;
+							loanYears.setAttribute('datavalue', items[0].value.howYear);
+							referenceInterest.innerHTML = items[0].value.rateInterest;
+							//							carCostParam.loanYears = items[0].value;
+							//							console.log(carCostParam);
+							//返回 false 可以阻止选择框的关闭
+							//return false;
+
+						});
+					}, false);
+					//汽车排量
+					var usageTaxopenObj = new $.PopPicker();
+					usageTaxopenObj.setData([{
+						value: '0',
+						text: '1.0L(含)以下'
+					}, {
+						value: '1.6',
+						text: '1.0-1.6L(含)'
+					}, {
+						value: '2',
+						text: '1.6-2.0L(含)'
+					}, {
+						value: '2.5',
+						text: '2.0-2.5L(含)'
+					}, {
+						value: '3',
+						text: '2.5-3.0L(含)'
+					}, {
+						value: '4',
+						text: '3.0-4.0L(含)'
+					}, {
+						value: '4.5',
+						text: '4.0L以上'
+					}]);
+					var usageTaxopen = doc.getElementById('usageTaxopen');
+					var usageTax = doc.getElementById('usageTax');
+					usageTaxopen.addEventListener('tap', function(event) {
+						usageTaxopenObj.show(function(items) {
+							usageTax.setAttribute('datavalue', items[0].value);
+							//							carCostParam.loanYears = items[0].value;
+							//							console.log(carCostParam);
+							//返回 false 可以阻止选择框的关闭
+							//return false;
+
+						});
+					}, false);
+
+					///////////////////////交强险
+					var trafficInsuranceopenObj = new $.PopPicker();
+					trafficInsuranceopenObj.setData([{
+						value: '5',
+						text: '家用6座以下'
+					}, {
+						value: '7',
+						text: '家用6座及以上'
+					}]);
+					var trafficInsuranceopen = doc.getElementById('trafficInsuranceOpen');
+					var trafficInsurance = doc.getElementById('trafficInsurance');
+					trafficInsuranceopen.addEventListener('tap', function(event) {
+						trafficInsuranceopenObj.show(function(items) {
+							trafficInsurance.setAttribute('datavalue', items[0].value);
+							//							carCostParam.loanYears = items[0].value;
+							//							console.log(carCostParam);
+							//返回 false 可以阻止选择框的关闭
+							//return false;
+
+						});
+					}, false);
+					//第三者责任险
+					var thirdInsuranceopenObj = new $.PopPicker();
+					thirdInsuranceopenObj.setData([{
+						value: '50000',
+						text: '5万'
+					}, {
+						value: '100000',
+						text: '10万'
+					}, {
+						value: '200000',
+						text: '20万'
+					}, {
+						value: '500000',
+						text: '50万'
+					}, {
+						value: '1000000',
+						text: '100万'
+					}]);
+                                        thirdInsuranceopenObj.pickers[0].setSelectedValue('500000', '50万');
+					var thirdInsuranceOpen = doc.getElementById('thirdInsuranceOpen');
+					var thirdInsurance = doc.getElementById('thirdInsurance');
+					thirdInsuranceOpen.addEventListener('tap', function(event) {
+						thirdInsuranceopenObj.show(function(items) {
+                                                thirdInsurance.setAttribute('datavalue', items[0].value);
+						});
+					}, false);
+
+				});
+			})(mui, document, jQuery);
+		</script>
+		<script src="js/carpurchasecost.js"></script>
+		<script src="js/shopCalculator.js"></script>
+
+	</body>
+
+</html>

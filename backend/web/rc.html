@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>下载</title>
+    <style type="text/css">
+        *{padding: 0; margin: 0;}
+        *:focus { outline: none; }
+        a{-webkit-tap-highlight-color:transparent}
+        html{font-size: 100px;}
+        img{vertical-align: top;}
+        .container{padding:0 0.12rem;}
+        .container ul li{overflow: hidden; padding: 0.28rem 0; font-size: 0.14rem; border-bottom:dashed 1px #E6E6E6;}
+        .container ul li img{ float: left; width: 0.72rem; height: 0.72rem; margin-right: 0.12rem; }
+        .container ul li h3{ font-size: 0.15rem; line-height: 1.5; }
+        .container ul li p{ font-size: 0.12rem; line-height: 20px; color: #888; word-break: break-all; text-align: justify;}
+        .software-detail{ float: left; width: 1.45rem; }
+        .download-btnbox{float: right;}
+        .download-btnbox .btn{
+            display: block;
+            width: 1.08rem;
+            height: 0.34rem;
+            line-height: 0.34rem;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 0.12rem;
+            border-radius: 0.17rem;
+            background-color: #333333;
+        }
+        .download-btnbox .btn.ios-btn{ background-color:#FDC235; color: #333333;}
+        .download-btnbox .btn.ios-btn:active{ background-color: #FDCE5D; }
+        .download-btnbox .btn.android-btn:active{ background-color: #666666; }
+        .download-btnbox .btn.disabled{background-color:#F0F0F0; color: #7F7F7F; cursor: default;}
+        .download-btnbox .btn.disabled:hover{ background-color:#F0F0F0; }
+        .download-btnbox .ios-img,.download-btnbox .android-img{
+            display: block;
+            float: left;
+            width: 0.14rem;
+            height: 0.18rem;
+            margin-left: 0.15rem;
+            margin-right: 0.08rem;
+            margin-top: 0.08rem;
+        }
+        .download-btnbox .ios-img{background: url(/dist/img/btn_ios.png); background-size: 100% 100%;}
+        .download-btnbox .disabled .ios-img{background: url(/dist/img/btn_ios_disable.png); background-size: 100% 100%;}
+        .download-btnbox .android-img{background: url(/dist/img/btn_android.png); background-size: 100% 100%;}
+        .download-btnbox .disabled .android-img{background: url(/dist/img/btn_android_disable.png); background-size: 100% 100%;}
+    </style>
+</head>
+<body>
+   <div class="wrapper" id="wrapper">
+        <header>
+            <div>
+            <!-- 
+                <img src="/dist/img/top_bg@2x.png" width="100%">
+                -->
+            </div>
+        </header>
+        <div class="container">
+            <ul>
+                <li>
+                    <img src="/dist/img/eweima_rc_sales.png" style="width:280px;height:280px;">
+                </li>
+                <li>
+                    <img src="/dist/img/logo_xiaoshou.png">
+                    <a class="btn android-btn" href="http://rc.crm.admin.che.com/appfile/android_sales.apk">
+                        <span class="android-img"></span>点击下载安卓版
+                    </a>
+                    <div class="download-btnbox"  style="display:none;">
+                    </div>
+                    <div class="software-detail">
+                        <h3>销售助手</h3>
+                        <p>版本V1.4.4</p>
+                        <p>使用对象：销售顾问、单店店长</p>
+                    </div>
+                </li>
+                <li style="display:none;">
+                    <img src="/dist/img/logo_guanli.png">
+                    <div class="download-btnbox">
+                         <a class="btn ios-btn" href="https://itunes.apple.com/cn/app/mei-wei-qi-qi/id1236056668?mt=8">
+                            <span class="ios-img"></span>IOS版
+                         </a>
+                         <a class="btn android-btn" href="http://admin.crm.che.com/appfile/android_glsb.apk">
+                            <span class="android-img"></span>安卓版
+                         </a>
+                    </div>
+                    <div class="software-detail">
+                        <h3>管理速报</h3>
+                        <p>版本V1.2.3</p>
+                        <p>使用对象：单店店长、区域经理、总部总经理</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+   </div>
+   <script type="text/javascript">
+        resize();
+        function resize(){
+            var bodyw = document.body.clientWidth;
+            if(bodyw < 376 && bodyw >319){
+                document.getElementsByTagName("html")[0].style.fontSize = (bodyw/3.75) + "px";
+            }else{
+                document.getElementsByTagName("html")[0].removeAttribute("style");
+            }
+        }
+        window.onresize = function(){
+            resize();
+        }
+   </script>
+</body>
+</html>

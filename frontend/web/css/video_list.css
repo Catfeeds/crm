@@ -1,0 +1,58 @@
+body {
+  font-family: "微软雅黑", Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-size: 12px;
+}
+ul,
+li,
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+p {
+  margin: 0px;
+  padding: 0px;
+}
+ul li {
+  list-style: none;
+}
+a,
+a:hover,a:active {
+  text-decoration: none;
+}
+.tabBox{padding-bottom: 20px;}
+.m_menu{ border-bottom: 0.1rem solid #D8D8D8; font-size: 0;}
+.m_menu li{ display: inline-block;line-height: 44px;height: 44px;width: 20%;text-align: center; }
+.m_menu li a{display: block; line-height: 44px;font-size: 14px;color: #999; }
+.m_menu li.active a{color: #1A1A1A;}
+.m_menu li:after{ position: relative;z-index: 1;display: block;width: 100%;content: '';-webkit-transform-origin: 50% 100%;-ms-transform-origin: 50% 100%;-o-transform-origin: 50% 100%;transform-origin: 50% 100%;}
+.m_menu li.active:after{content:"";height:4px;width: 24px;background:rgba(0,0,0,0.87);;margin:0 auto;margin-top:-3px;}
+
+
+.m_about_cen ul>li span{display: inline-block;width: 24px;height: 24px;line-height:24px;text-align:center;border-radius: 100%;background: #FDC235;font-size: 14px;color: #1A1A1A;margin-right:12px;}
+.m_about_cen ul li a{color: #1A1A1A; font-size: 15px;line-height: 48px;border-bottom: 1px solid #f0f0f0; display: block;width: 100%;padding:0 12px;}
+.m_about_cen ul>li.more em{background: url('../img/drop_up2x.png') no-repeat right center;display: inline-block;float:right;width: 24px;height:24px;background-size: 100%;margin-top:12px; -webkit-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+    -webkit-transition: -webkit-transform .3s ease-out;
+    -o-transition: transform .3s ease-out, -o-transform .3s ease-out;
+    transition: transform .3s ease-out;
+    transition: -webkit-transform .3s ease-out;
+    -webkit-transform .3s ease-out, -o-transform .3s ease-out;
+}
+.m_about_cen ul li.is-open em{
+    -webkit-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+}
+.m_about_cen ul li >ul{display: none;}
+.m_about_cen ul li.is-open >ul{display: block;}
+.m_about_cen ul li >ul a{padding-left:48px;}
+.m_about_cen ul li >ul a:active{ background-color: #f0f0f0}
+.m_about_cen ul li a{ text-decoration: none;}

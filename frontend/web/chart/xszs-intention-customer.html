@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="-1">
+    <title>新增意向客户 更近中意向客户</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<section class="main">
+    <div class="chart_box">
+        <div class="chart_title"><p>新增客户变化趋势</p>
+            <label class="m-switch">
+              <input type="checkbox" checked>
+              <span></span>
+              <span>显示列表</span>
+              <span>隐藏列表</span>
+            </label>
+        </div>
+        <div class="chart">
+            <div id="Risk" style="height:250px;width:100%;text-align:center;"></div>
+        </div>
+        <div class="bg table border-table">
+            <table id="intent">
+                <thead>
+                    <tr>
+                        <th width="40%">时间</th>
+                        <th width="20%">我的</th>
+                        <th width="20%">店平均</th>
+                        <th width="20%">店最高</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="chart_box">
+        <div class="chart_title"><p>意向客户等级占比（当前所有客户）</p>
+            <label class="m-switch">
+              <input type="checkbox" checked>
+              <span></span>
+              <span>显示列表</span>
+              <span>隐藏列表</span>
+            </label>
+        </div>
+        <div class="chart">
+            <div id="realData" style="height:250px;width:100%;text-align:center;"></div>
+        </div>
+        <div class="bg table border-table">
+            <table id="realData-table">
+                <thead>
+                    <tr>
+                        <th width="40%">意向等级</th>
+                        <th width="30%">数量</th>
+                        <th width="30%">占比</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="chart_box">
+        <div class="chart_title"><p>意向客户标签（当前所有客户）</p>
+            <label class="m-switch">
+              <input type="checkbox" checked>
+              <span></span>
+              <span>显示列表</span>
+              <span>隐藏列表</span>
+            </label>
+        </div>
+        <div class="chart">
+            <div id="Earnings" style="height:250px;width:100%;text-align:center;"></div>
+        </div>
+        <div class="bg table border-table">
+            <table id="Earnings-table">
+                <thead>
+                    <tr>
+                        <th width="40%">意向等级</th>
+                        <th width="30%" width="40%">数量</th>
+                        <th width="30%">占比</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+<script type="text/javascript" src="js/zepto.min.js"></script>
+<script type="text/javascript" src="js/echarts.min.js" ></script>
+<script type="text/javascript" src="js/swiper-3.4.2.jquery.min.js" ></script>
+<script type="text/javascript" src="js/common.js" ></script>
+<script type="text/javascript">
+$(function () {
+       //新增客户变化趋势
+        var myChart = echarts.init(document.getElementById('Risk'));
+        var myChart1 = echarts.init(document.getElementById('realData'));
+        var myChart2 = echarts.init(document.getElementById('Earnings'));
+        var token = window.JavaJs.token();
+        var type = window.JavaJs.getChooseType();
+        var datetime = window.JavaJs.getDateTime();
+        var os_type = window.JavaJs.getOsType();
+       /* var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjI3MCwiaXNzIjoiaHR0cDpcL1wvMTE4LjE3OC4xMzUuMTU4OjgwODBcL2FwaVwvdXNlcnNcL2xvZ2luIiwiaWF0IjoxNDkxNTI4ODYzLCJleHAiOjE0OTMwNDA4NjMsIm5iZiI6MTQ5MTUyODg2MywianRpIjoiNjdkN2NhOGExN2Y4NjJjYWJlNTIwZjgzNTAwMWEzZjYifQ.E58Kcv0stMDRon3T7iJtnH16XuRn3gih8P9OI4a5Czo";
+        var os_type = "ios";
+        var type = "month";
+        var datetime = "2017-3";*/
+        var r = JSON.stringify({
+              "access_token":token,
+              "os_type":os_type
+            });
+        var p = JSON.stringify({
+              "type":type,
+              "date_time":datetime
+            });
+
+        $.post("/sales/board/intent",{"r":r,"p":p},function(response){
+            var legend = response.data.intent.chart.legend;
+            var formmat = function(params, ticket, callback){
+                        var h = params[0].axisValue+"<br>";
+                        for(var i= 0; i < params.length;i++){
+                            if(i == params.length-1){
+                                h += params[i].seriesName+" : " + params[i].value +'';
+                            }else{
+                                h += params[i].seriesName+" : " + params[i].value +"<br>";
+                            }
+
+                        }
+                        return h;
+                }
+            var option = Brokenline('option',response.data.intent.chart,"30%",formmat,true);
+                myChart.setOption(option);
+                var table="";
+                for(var i in response.data.intent.list){
+                    var self = deal(response.data.intent.list[i].self,"");
+                    var shop = deal(response.data.intent.list[i].shop,"");
+                    var most = deal(response.data.intent.list[i].most,"");
+                        table +="<tr><td>"+response.data.intent.list[i].date+"</td><td>"+self+"</td><td>"+shop+"</td><td>"+most+"</td></tr>";
+                }
+                $("#intent tbody").html(table);
+
+            var option1 = pieoption('option1','意向客户等级占比',response.data.intentLevel.chart);
+                myChart1.setOption(option1);
+                var table1="";
+                for(var i in response.data.intentLevel.list){
+                    var rate1 = deal(response.data.intentLevel.list[i].rate,"%");
+                        table1 +="<tr><td>"+response.data.intentLevel.list[i].name+"</td><td>"+response.data.intentLevel.list[i].count+"</td><td>"+rate1+"</td></tr>";
+                }
+                $("#realData-table tbody").html(table1);
+
+            var option2 = pieoption('option2','意向客户标签',response.data.tags.chart)
+                myChart2.setOption(option2);
+                var table2="";
+                for(var i in response.data.tags.list){
+                    var rate2 = deal(response.data.tags.list[i].rate,"%");
+                        table2 +="<tr><td>"+response.data.tags.list[i].name+"</td><td>"+response.data.tags.list[i].count+"</td><td>"+rate2+"</td></tr>";
+                }
+                $("#Earnings-table tbody").html(table2);
+        },'json');
+
+
+        $(window).resize(function(){
+            myChart.resize();
+            myChart1.resize();
+            myChart2.resize();
+        });
+});
+</script>
+</body>
+</html>

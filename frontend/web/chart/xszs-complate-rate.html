@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="-1">
+    <title>电话任务完</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<section class="main">
+    <div class="chart_box">
+        <div class="chart_title"><p>电话任务完成率</p>
+            <label class="m-switch">
+              <input type="checkbox" checked>
+              <span></span>
+              <span>显示列表</span>
+              <span>隐藏列表</span>
+            </label>
+        </div>
+        <div class="chart">
+            <div id="Risk" style="height:250px;width:100%;text-align:center;"></div>
+        </div>
+        <div class="bg table border-table">
+            <table id="phone">
+                <thead>
+                    <tr>
+                        <th width="40%">时间</th>
+                        <th width="20%">我的</th>
+                        <th width="20%">店平均</th>
+                        <th width="20%">店最高</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<script type="text/javascript" src="js/zepto.min.js"></script>
+<script type="text/javascript" src="js/echarts.min.js" ></script>
+<script type="text/javascript" src="js/swiper-3.4.2.jquery.min.js" ></script>
+<script type="text/javascript" src="js/common.js" ></script>
+<script type="text/javascript">
+$(function () {
+        var myChart = echarts.init(document.getElementById('Risk'));
+        var token = window.JavaJs.token();
+        var type = window.JavaJs.getChooseType();
+        var datetime = window.JavaJs.getDateTime();
+        var os_type = window.JavaJs.getOsType();
+       /* var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjI3MCwiaXNzIjoiaHR0cDpcL1wvMTE4LjE3OC4xMzUuMTU4OjgwODBcL2FwaVwvdXNlcnNcL2xvZ2luIiwiaWF0IjoxNDkxNTI4ODYzLCJleHAiOjE0OTMwNDA4NjMsIm5iZiI6MTQ5MTUyODg2MywianRpIjoiNjdkN2NhOGExN2Y4NjJjYWJlNTIwZjgzNTAwMWEzZjYifQ.E58Kcv0stMDRon3T7iJtnH16XuRn3gih8P9OI4a5Czo";
+        var os_type = "ios";
+        var type ="month";
+        var datetime = "2017-3";*/
+        var r = JSON.stringify({
+              "access_token":token,
+              "os_type":os_type
+          });
+        var p = JSON.stringify({
+              "type":type,
+              "date_time":datetime
+         });
+        $.post("/sales/board/task-phone",{r:r,p:p},function(response){
+            var formmat = function(params, ticket, callback){
+                        var h = params[0].axisValue+"<br>";
+                        for(var i= 0; i < params.length;i++){
+                            if(i == params.length-1){
+                                h += params[i].seriesName+" : " + params[i].value +'%';
+                            }else{
+                                h += params[i].seriesName+" : " + params[i].value +"%<br>";
+                            }
+
+                        }
+                        return h;
+                }
+            var option = Brokenline('option',response.data.chart,"30%",formmat,true);
+                myChart.setOption(option);
+                var table ="";
+                for(var i in response.data.list){
+                    var date = deal(response.data.list[i].date,"");
+                    var self = deal(response.data.list[i].self,"%");
+                    var shop = deal(response.data.list[i].shop,"%");
+                    var most = deal(response.data.list[i].most,"%");
+                    table +="<tr><td>"+date+"</td><td>"+self+"</td><td>"+shop+"</td><td>"+most+"</td></tr>";
+                }
+                $("#phone tbody").html(table);
+        },'json');
+
+    $(window).resize(function(){
+        myChart.resize();
+    });
+});
+</script>
+</body>
+</html>

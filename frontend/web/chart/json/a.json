@@ -1,0 +1,176 @@
+{
+    "id_0": [
+        {
+            "id": 13,
+            "name": "上海大区",
+            "submenu": 1
+        },
+        {
+            "id": 35,
+            "name": "山东一区",
+            "submenu": 1
+        },
+        {
+            "id": 95,
+            "name": "江西区域",
+            "submenu": 1
+        },
+        {
+            "id": 100,
+            "name": "南京大区",
+            "submenu": 1
+        },
+        {
+            "id": 101,
+            "name": "山东二区",
+            "submenu": 1
+        },
+        {
+            "id": 102,
+            "name": "山东试点区",
+            "submenu": 1
+        }
+    ],
+    "id_13": [
+        {
+            "id": 14,
+            "name": "上海店",
+            "submenu": 0
+        },
+        {
+            "id": 18,
+            "name": "泰兴店",
+            "submenu": 0
+        },
+        {
+            "id": 21,
+            "name": "如东店",
+            "submenu": 0
+        },
+        {
+            "id": 29,
+            "name": "临安店",
+            "submenu": 0
+        },
+        {
+            "id": 55,
+            "name": "桐庐店",
+            "submenu": 0
+        }
+    ],
+    "id_100": [
+        {
+            "id": 16,
+            "name": "南京店",
+            "submenu": 0
+        },
+        {
+            "id": 17,
+            "name": "扬中店",
+            "submenu": 0
+        },
+        {
+            "id": 19,
+            "name": "仪征店",
+            "submenu": 0
+        },
+        {
+            "id": 24,
+            "name": "沭阳店",
+            "submenu": 0
+        },
+        {
+            "id": 25,
+            "name": "涟水店",
+            "submenu": 0
+        }
+    ],
+    "id_95": [
+        {
+            "id": 30,
+            "name": "丰县店",
+            "submenu": 0
+        },
+        {
+            "id": 34,
+            "name": "大丰店",
+            "submenu": 0
+        },
+        {
+            "id": 37,
+            "name": "滨海店",
+            "submenu": 0
+        },
+        {
+            "id": 44,
+            "name": "滕州店",
+            "submenu": 0
+        },
+        {
+            "id": 46,
+            "name": "胶州店",
+            "submenu": 0
+        },
+        {
+            "id": 96,
+            "name": "上饶店",
+            "submenu": 0
+        },
+        {
+            "id": 97,
+            "name": "抚州店",
+            "submenu": 0
+        },
+        {
+            "id": 98,
+            "name": "新余店",
+            "submenu": 0
+        }
+    ],
+    "id_101": [
+        {
+            "id": 41,
+            "name": "高密店",
+            "submenu": 0
+        },
+        {
+            "id": 43,
+            "name": "莱州店",
+            "submenu": 0
+        },
+        {
+            "id": 45,
+            "name": "寿光店",
+            "submenu": 0
+        },
+        {
+            "id": 47,
+            "name": "胶南店",
+            "submenu": 0
+        },
+        {
+            "id": 48,
+            "name": "招远店",
+            "submenu": 0
+        },
+        {
+            "id": 49,
+            "name": "诸城店",
+            "submenu": 0
+        }
+    ],
+    "id_35": [
+        {
+            "id": 42,
+            "name": "龙口店",
+            "submenu": 0
+        }
+    ],
+    "id_102": [
+        {
+            "id": 51,
+            "name": "广饶店",
+            "submenu": 0
+        }
+    ]
+}

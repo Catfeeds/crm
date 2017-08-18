@@ -1,0 +1,97 @@
+*,html{
+    font-family: '微软雅黑';
+}
+body{
+    overflow-x:hidden;
+    background: #eee;
+    font-family: '微软雅黑';
+    padding: 0;
+    margin: 0;
+    color: #333;
+}
+ul,li{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.bar{
+    position: fixed;
+    right: 0;
+    left: 0;
+    z-index: 10;
+    height: 44px;
+    padding: 0 6px;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    background: #fff;
+}
+.bar .title{
+    margin: 0;
+    font-size: 18px;
+    text-align: center;
+    font-weight: normal;
+    line-height: 44px;
+    position: absolute;
+    display: block;
+    width: 100%;
+    font-size: 15px;
+}
+.bar .icon {
+    position: relative;
+    z-index: 20;
+    padding: 12px 6px;
+    display: inline-block;
+}
+.sst-xiangzuo{
+    background: url('../img/back_left.png') no-repeat;
+    width: 12px;
+    height: 20px;
+    display: block;
+}
+.content{
+    padding-top: 44px;
+    font-size: 14px;
+    line-height: 40px;
+}
+img{
+    vertical-align: middle;
+}
+.content .weui-cells__title{
+    padding:0 10px;
+    line-height: 25px;
+    font-size: 12px;
+}
+.content .weui-cells{
+    background: #fff;
+}
+.weui-cell:before{
+    left: 0;
+}
+
+.weui-cell{
+    padding:0 10px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+}
+.weui-btn-area{
+    margin: 40px 60px;
+    text-align: center;
+}
+.weui-btn-area a{
+    text-decoration:none;
+    color: #fff;
+    border-radius: 6px;
+    display: block;
+}
+.weui-btn_primary{
+    background: #32aafa;
+}
+.weui-btn_primary:not(.weui-btn_disabled):active{
+    background: #2888c8;
+}
+.money{
+    color: red;
+    font-style: normal;
+}

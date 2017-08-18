@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>管理速报demo</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="-1">
+    <link rel="stylesheet" type="text/css" href="css/swiper.min.css">
+    <style type="text/css">
+        *{
+            margin: 0;
+            padding: 0;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        html{ max-width: 640px; height: 100%; margin: 0 auto;}
+        body{ max-width: 640px; height: 100%;}
+        li{ list-style: none;}
+        .none{display: none;}
+        .c-timegray{ color:#999 !important; }
+
+        .filterbox{position: relative; z-index: 1; background-color: #fff; font-size: 0;}
+        .overflow{position: absolute; top: 0; left: 0; z-index: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.15); }
+        .input-wrapper{ display: block; text-align: center; padding: 0.12rem 0; border-bottom: 1px solid #E7E7E7; }
+        .channelinput,.storeinput,.timeinput{position: relative; display:inline-block; font-size: 0.14rem;  }
+        .channelinput .chevron-down,.storeinput .chevron-down,.timeinput .chevron-down{position: absolute; top: -0.02rem; right:-0.24rem; width: 0.24rem; height: 0.24rem; background:url(img/ic_dropdown.png) center center no-repeat; background-size: 100% 100%; }
+        .channelbox input,.storebox input,.timebox input{ border: 0; background: none; margin-left: -0.24rem; font-size: 0.14rem; }
+
+
+        .channelbox{ display: inline-block; width: 33.333333%; font-size: 0;}
+        .channelbox ul {position: absolute; width: 100%; padding: 0.06rem; font-size: 0.14rem; background-color: #fff;}
+        .channelbox ul li{float: left; line-height: 0.2rem; padding: 0.09rem 0.16rem; margin:0.06rem; border:1px solid #ccc; border-radius: 0.04rem; color: #666;}
+        .channelbox ul li.active{background: #FDC235; color: #1A1A1A; border-color:#FDC235; }
+
+
+        .storebox{ display: inline-block; width: 33.333333%; font-size: 0;}
+        .cascader-list {position: absolute; top: 0.44rem; left: 0; width:100%;  overflow-x: auto; background: #fff; z-index: 1050; border-radius: 0.04rem; white-space: nowrap; box-shadow: 0 1px 0.06rem rgba(0,0,0,.2); font-size:0;}
+        .cascader-list .dpac-inputbox{ height:auto;}
+        .cascader-list .dpac-inputbox input{ width: 100%; height: 0.34rem; line-height: 0.34rem; padding: 0 3%; margin: 0; border:1px solid #ddd; border-radius: 5px; }
+        .cascader-list .dpac-inputbox input:focus,.cascader-list .dpac-inputbox input:hover{border:1px solid #49a9ee;}
+        .cascader-list ul{display: inline-block; vertical-align: top; min-width: 1.18rem; height:2.45rem; list-style: none; margin: 0; padding: 0;  overflow: auto; -webkit-text-size-adjust:none; }
+        .cascader-list ul li{position: relative; list-style: none; zoom: 1; font-size: 0.15rem; height: 0.49rem; min-width: 111px; line-height: 1; padding:0.17rem 0.26rem 0.17rem 0.16rem; cursor: pointer; white-space: nowrap; -webkit-transition: all .3s ease; transition: all .3s ease;  border-left: 0.04rem solid #fff;}
+        .cascader-list ul:first-child li{background-color: #F5F5F5; border-bottom: 1px solid #E6E6E6;border-right: 1px solid #e9e9e9; border-left: 0.04rem solid #F5F5F5;}
+        .cascader-list ul li.active{ font-weight: 700; border-left-color:#FDC235; background-color: #F5F5F5; }
+        .cascader-list ul li i{position: absolute; top: 0.09rem; right: 0.15rem; width: 0.1rem;height: 0.1rem;font-size:0.12rem; color: #ddd}
+
+
+
+        .timebox{ display: inline-block; width: 33.333333%; font-size: 0;}
+        .timebox .timelist{ position: absolute; left: 0; width: 100%; background-color: #fff; }
+        .timebox .date-list{  margin:0 0.38rem; }
+        .timebox .swiper-container{ width:100%;}
+        .timebox .swiper-wrapper .swiper-slide{ width: 100%; padding: 0.05rem 0; font-size: 0;}
+        .timebox .swiper-wrapper .swiper-slide li{ display: inline-block; width: 16.5%; text-align: center;}
+        .timebox .swiper-wrapper .swiper-slide li a{ display: inline-block; width: 0.48rem; height: 0.48rem; font-size: 0.14rem; text-align: center; text-decoration: none; color: #1A1A1A; line-height: 0.48rem; border-radius: 0.48rem;}
+        .timebox .swiper-wrapper .swiper-slide li.active a{ background-color: #FDC235;}
+        .timebox .swiper-wrapper .swiper-slide li.active a.c-timegray{ background-color: #fff; }
+        .timebox a.prev,.timebox a.next{ position: absolute; left: 0; width: 0.38rem; height: 0.74rem; line-height: 0.74rem;}
+        .timebox a.prev img,.timebox a.next img{ position: absolute; width: 0.1rem; margin-left: 0.08rem; top: 0.22rem; vertical-align: top;}
+        .timebox a.next{left: auto; right: 0; }
+        .timebox a.next img{ margin-right: 0.08rem; right: 0;}
+        .timebox.year .swiper-wrapper .swiper-slide li{ width: 20%; }
+        .timebox.year .swiper-wrapper .swiper-slide li a { width:0.57rem; }
+        .content{
+            font-size: 0.14rem;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="filterbox">
+      <div class="channelbox">
+           <div class="input-wrapper">
+               <div class="channelinput">
+                   <input type="text" value="渠道来源" readonly style="width:0;height:0">
+                   <span class="chevron-down"></span>
+               </div>
+           </div>
+           <ul class="none">
+               <li class="active">自建</li>
+               <li>400电话</li>
+               <li>在线预订</li>
+               <li>客服</li>
+               <li>电信数据</li>
+           </ul>
+       </div>
+       <div class="storebox">
+           <div class="input-wrapper">
+               <div class="storeinput">
+                   <input type="text" value="区域和门店" readonly style="width:0;height:0">
+                   <span class="chevron-down"></span>
+               </div>
+           </div>
+           <div class="cascader-list none">
+               <ul class="cascader-menu">
+               </ul>
+           </div>
+       </div>
+       <div class="timebox">
+           <div class="input-wrapper">
+               <div class="timeinput">
+                   <input class="datetime" type="button" value="2017-03" readonly  style="width:0;height:0">
+                   <span class="chevron-down"></span>
+               </div>
+           </div>
+           <div class="time-yearmonth timelist none">
+              <a class="prev" href="javascript:;"><img src="img/ic_arrowleft.png"></a>
+              <a class="next" href="javascript:;"><img src="img/ic_arrowright.png"></a>
+              <div class="date-list">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                    </div>
+                </div>
+              </div>
+           </div>
+       </div>
+       </div>
+
+    <div class="content">
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+    </div>
+   <!-- <div class="filterbox">
+      <div class="channelbox">
+           <div class="input-wrapper">
+               <div class="channelinput">
+                   <input type="button" value="渠道来源" readonly>
+                   <span class="chevron-down"></span>
+               </div>
+           </div>
+           <ul class="none">
+               <li class="active">自建</li>
+               <li>400电话</li>
+               <li>在线预订</li>
+               <li>客服</li>
+               <li>电信数据</li>
+           </ul>
+       </div>
+       <div class="storebox">
+           <div class="input-wrapper">
+               <div class="storeinput">
+                   <input type="button" value="区域和门店" readonly>
+                   <span class="chevron-down"></span>
+               </div>
+           </div>
+           <div class="cascader-list none">
+               <ul class="cascader-menu">
+               </ul>
+           </div>
+       </div>
+       <div class="timebox year">
+           <div class="input-wrapper">
+               <div class="timeinput">
+                   <input class="datetime" type="button" value="2017" readonly>
+                   <span class="chevron-down"></span>
+               </div>
+           </div>
+           <div class="time-yearmonth timelist none">
+              <a class="prev" href="javascript:;"><img src="img/ic_arrowleft.png"></a>
+              <a class="next" href="javascript:;"><img src="img/ic_arrowright.png"></a>
+              <div class="swiper-container year">
+                  <div class="swiper-wrapper">
+                  </div>
+              </div>
+           </div>
+       </div>
+   </div> -->
+
+    <div class="content">
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+        dasdasdasdasd <br>
+    </div>
+    <div id="overflow" class="overflow none"></div>
+
+    <script type="text/javascript" src="js/zepto.min.js"></script>
+    <script type="text/javascript" src="js/swiper-3.4.2.jquery.min.js"></script>
+    <script type="text/javascript">
+        fun();
+        $(window).resize(fun)
+        function fun(){
+            var hw = $(window).width();
+            if(hw > 319)
+            {
+               $('html').css({fontSize:(hw/6.4)+'px'});
+            }
+            /*else
+            {
+               $('html').css({fontSize:100});
+            }*/
+        }
+
+        /**时间选择
+        ** 年月
+        **/
+        var startyear = 2015;
+        var year = new Date().getFullYear();
+        var month = new Date().getMonth();
+
+        $(".timebox .input-wrapper").click(function(){
+            if(!$(this).parent().hasClass("year")){
+                $(this).parent().siblings().find(".input-wrapper").next().addClass("none");
+                if($(this).next().hasClass("none")){
+                    $(this).next().removeClass("none");
+                    $(".swiper-wrapper").html('');
+                    var cur_show_year = $(this).find("input").val().split("-")[0];
+                    var cur_show_month = $(this).find("input").val().split("-")[1]*100/100;
+                    start_swipe_yearmonth(cur_show_year,cur_show_month);
+                    $("#overflow").removeClass("none");
+                }else{
+                    $(this).next().addClass("none");
+                    $(".swiper-wrapper").html('');
+                    $("#overflow").addClass("none");
+                }
+            }else{
+                $(this).parent().siblings().find(".input-wrapper").next().addClass("none");
+                if($(this).next().hasClass("none")){
+                    $(this).next().removeClass("none");
+                    $(".swiper-wrapper").html('');
+                    var cur_show_year = $(this).find("input").val();
+                    start_swipe_year(cur_show_year);
+                    $("#overflow").removeClass("none");
+                }else{
+                    $(this).next().addClass("none");
+                    $(".swiper-wrapper").html('');
+                    $("#overflow").addClass("none");
+                }
+            }
+
+        });
+
+        var swiper = new Swiper('.swiper-container', {
+            nextButton: '.next',
+            prevButton: '.prev',
+            pagination: '.swiper-pagination',
+            paginationClickable: true,
+            spaceBetween: 0
+        });
+
+        /*var swiper1 = new Swiper('.swiper-container', {
+            nextButton: '.next',
+            prevButton: '.prev',
+            paginationClickable: true,
+            spaceBetween: 0
+        });
+*/
+
+        /*function start_swipe_year(m){//m为显示的当前年份，n为显示的当前月份
+
+            var num = Math.ceil((m-startyear)/10);
+                if(num == 0 ){
+                    num = 1;
+                }
+
+                for(var j = 1; j <= num+1; j++){
+                    swiper1.appendSlide(slidedata_year(j,startyear,m));
+                }
+
+                slidenum = Math.floor((m-startyear)/10);
+                swiper1.slideTo(slidenum,1, false);
+
+                swiper1.on('slideChangeStart',function(swiper){
+                    swiper1.lockSwipes();
+                });
+
+                swiper1.on('slideChangeEnd',function(swiper){
+                    swiper1.unlockSwipes();
+                    var len = swiper1.slides.length;
+                    if(swiper1.activeIndex == swiper1.slides.length-1){
+                        console.log(swiper1.activeIndex);
+                        var newyear = swiper1.activeIndex+2;
+                            swiper1.appendSlide(slidedata_year(newyear,startyear,m));
+                    }
+                });
+        }
+
+        function slidedata_year(a,b,c){
+            var html="";
+            var class_active = $(".swiper-slide li").hasClass("active");
+                html+='<div class="swiper-slide"><ul>';
+                for(var i = (a-1)*10 + b ; i < a*10 + b ; i++){
+                    if( i == c && !class_active){
+                            html+='<li class="active" ><a ';
+                            if(i > year){
+                                html+='class="c-timegray" ';
+                            }
+                            html+=' href="javascript:;"><span>'+ i +'</span></a></li>';
+                     }else{
+                            html+='<li><a ';
+                            if(i > year){
+                                html+='class="c-timegray" ';
+                            }
+                            html+=' href="javascript:;"><span>'+ i +'</span></a></li>';
+                    }
+                }
+                html+="</ul></div>";
+            return html;
+        }*/
+
+
+
+
+        $("body").delegate(".swiper-slide li a","click",function(){
+            var _this = $(this);
+            var parents = _this.parents(".timebox");
+            if(!parents.hasClass("year")){
+                var y = $(this).parents(".swiper-slide").attr("data-year");
+                var m = $(this).find("span").text();
+                    if(y*1 <= year && m*1 <= month){
+                        if(m<10){ m = '0' + m;}
+                        $(this).parents(".timelist").prev().find("input").val(y+'-'+m);
+                        $(this).parent().addClass("active").siblings().removeClass("active");
+                        $(this).parents(".swiper-slide").siblings().find("li").removeClass("active");
+                        setTimeout(function() {
+                            _this.parents(".timelist").addClass("none");
+                        },100);
+                        $("#overflow").addClass("none");
+                    }else if(y*1 < year){
+                        if(m<10){ m = '0' + m;}
+                        $(this).parents(".timelist").prev().find("input").val(y+'-'+m);
+                        $(this).parent().addClass("active").siblings().removeClass("active");
+                        $(this).parents(".swiper-slide").siblings().find("li").removeClass("active");
+                        setTimeout(function() {
+                            _this.parents(".timelist").addClass("none");
+                        },100);
+                        $("#overflow").addClass("none");
+                    }
+            }else{
+                var y = $(this).find("span").text();
+                    if(y*1 <= year){
+                        $(this).parents(".timelist").prev().find("input").val(y);
+                        $(this).parent().addClass("active").siblings().removeClass("active");
+                        $(this).parents(".swiper-slide").siblings().find("li").removeClass("active");
+                        setTimeout(function() {
+                            _this.parents(".timelist").addClass("none");
+                        },100);
+                        $("#overflow").addClass("none");
+                    }
+            }
+
+        });
+
+        function start_swipe_yearmonth(m,n){//m为显示的当前年份，n为显示的当前月份
+            if(startyear <= year && m >= year){
+                for(var i = m-startyear;i >= 0;i--){
+                    swiper.appendSlide(slidedata_yearmonth(m-i,startyear,m,n));
+                }
+                swiper.appendSlide(slidedata_yearmonth(m*1+1,startyear,m,n));
+                swiper.slideTo((m-startyear)*1,1, false);
+            }else{
+                for(var i = year-startyear;i >= 0;i--){
+                    swiper.appendSlide(slidedata_yearmonth(year-i,startyear,m,n));
+                }
+                swiper.appendSlide(slidedata_yearmonth(year+1,startyear,m,n));
+                swiper.slideTo((year-startyear)*1,1, false);
+            }
+
+            swiper.on('slideChangeStart',function(swiper){
+                swiper.lockSwipes();
+            });
+
+            swiper.on('slideChangeEnd',function(swiper){
+                swiper.unlockSwipes();
+                var len = swiper.slides.length;
+                if(swiper.activeIndex == swiper.slides.length-1){
+                    var datayear = $(".swiper-wrapper .swiper-slide").eq(swiper.activeIndex).attr("data-year");
+                    var newyear = datayear*1+1;
+                        swiper.appendSlide(slidedata_yearmonth(newyear,startyear,m,n));
+                }
+            });
+        }
+
+        function slidedata_yearmonth(a,b,c,d){
+            var html='<div class="swiper-slide" data-year="'+ a +'"><ul>';
+            var class_active = $(".swiper-slide li").hasClass("active");
+            for(var i=1;i<13;i++){
+                if(d == i && a == c && !class_active){
+                        html+='<li class="active" ><a ';
+                        if(a == year && i > month){
+                            html+='class="c-timegray" ';
+                        }else if(a > year){
+                            html+='class="c-timegray" ';
+                        }
+                        html+=' href="javascript:;"><span>'+ i +'</span>月</a></li>';
+                 }else{
+                        html+='<li><a ';
+                        if(a == year && i > month){
+                            html+='class="c-timegray" ';
+                        }else if(a > year){
+                            html+='class="c-timegray" ';
+                        }
+                        html+=' href="javascript:;"><span>'+ i +'</span>月</a></li>';
+                }
+            }
+            return html+"</ul></div>";
+        }
+
+
+
+
+
+
+
+        //渠道选择
+        $(".channelbox li").click(function(){
+            var value = $(this).text();
+            $(this).addClass("active").siblings().removeClass("active").parent().addClass("none").prev().find("input").val(value);
+            $("#overflow").addClass("none");
+        });
+        $(".channelbox .input-wrapper").click(function(){
+            if($(this).next().hasClass("none")){
+                $(this).parent().siblings().find(".input-wrapper").next().addClass("none");
+                $(this).next().removeClass("none");
+                $("#overflow").removeClass("none");
+            }else{
+               $(this).next().addClass("none");
+               $("#overflow").addClass("none");
+            }
+        });
+
+
+        //地区
+        $("body").delegate(".cascader-list .cascader-menu li","click",function(e){
+            $(".cascader .cascader-input").focus();
+            var _this =  $(this);
+            var pid = _this.data("pid");
+            var id = _this.data("id");
+            var index =  $(this).parent().index();
+            var parents = _this.parents(".cascader-list");
+            var html="",result="";
+
+            _this.addClass("active").siblings().removeClass("active");
+            if(_this.hasClass("submenu")){
+                $.get("demo.json",{},function(response){
+                    html += '<ul class="cascader-menu"><li>全部</li>';
+                    for( i in response[index+1].data){
+                        if(response[index+1].data[i].pid == id && response[index+1].data[i].submenu == 1 ){
+                            html += '<li class="submenu" data-id="'+ response[index+1].data[i].id +'">'+ response[index+1].data[i].name +'<i class="fa fa-fw fa-chevron-right"></i></li>';
+                        }else if(response[index+1].data[i].pid == id && response[index+1].data[i].submenu == 0 ){
+                            html += '<li data-id="'+ response[index+1].data[i].id +'">'+ response[index+1].data[i].name +'</li>';
+                        }
+                    }
+                    html += '</ul>';
+                    parents.find("ul").each(function(){
+                        if($(this).index() > index){
+                            $(this).remove();
+                        }
+                    });
+                    parents.append(html);
+                },'json');
+            }else{
+                if(_this.text() != "全部"){
+                  parents.find("ul").each(function(){
+                      if(parents.find("ul").length-1 == $(this).index()){
+                          result += _this.text();
+                      }else{
+                          result += $(this).find(".active").text() + "/";
+                      }
+                      if($(this).index() > 0){
+                        $(this).remove();
+                      }else{
+                        $(this).parent().addClass("none");
+                      }
+                  });
+                }else{
+                    parents.find("ul").each(function(){
+                        if($(this).index() < index &&　$(this).index() == 0){
+                            result += $(this).find(".active").text();
+                        }else if($(this).index() < index　&&　$(this).index() > 0){
+                            result += "/" + $(this).find(".active").text();
+                        }else{
+                            result +='';
+                        }
+                    });
+                    parents.addClass("none").find("ul").eq(0).siblings().remove();
+                }
+                parents.prev().find("input").val(result);
+                $("#overflow").addClass("none");
+            }
+            e.stopPropagation();
+        });
+
+
+        $("body").delegate(".storebox .input-wrapper","click",function(e){
+            var _this = $(this);
+            $(this).parent().siblings().find(".input-wrapper").next().addClass("none");
+            cascader_list = _this.next();
+            if(cascader_list.hasClass("none")){
+                cascader_list.removeClass("none");
+                $("#overflow").removeClass("none");
+            }else{
+                cascader_list.addClass("none");
+                $("#overflow").addClass("none");
+            }
+            $.get("demo.json",{},function(response){
+                var html = "";
+                    for(var i in response[0].data){
+                            if(response[0].data[i].submenu == 1){
+                                html +='<li class="submenu" data-id="'+ response[0].data[i].id +'">'+ response[0].data[i].name +'<i class="fa fa-fw fa-chevron-right"></i></li>';
+                            }else{
+                                html +='<li data-id="'+ response[0].data[i].id +'">'+ response[0].data[i].name +'</li>';
+                            }
+                    }
+                    cascader_list.find(".cascader-menu").append(html);
+            },'json');
+            e.stopPropagation();
+        });
+
+
+
+
+
+
+    </script>
+</body>
+</html>

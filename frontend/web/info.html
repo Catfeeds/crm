@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+
+
+</head>
+<body>
+<div id="main">
+    <form action="http://api.crm.com/info/car_to_shop.php" method="post">
+        order_id:<input name="order_id" value="20170725175826312372">
+        <input type="hidden" name="r" value='{"access_token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjI3MywiaXNzIjoiaHR0cDpcL1wvdGVzdC5xeC1hcGkuY2hlY2hlbmcubmV0XC9hcGlcL3VzZXJzXC9sb2dpbiIsImlhdCI6MTUwMDk3Njc5OCwiZXhwIjoxNTAyNDg4Nzk4LCJuYmYiOjE1MDA5NzY3OTgsImp0aSI6IjBhYjkwM2EzODY5Mjk1ZWEyNGQ0YjQzNzE5NGNlN2ZjIn0.ietrgq2M6IMeqel5e3ROrn18zp0vrHc1C5Dls3ugTNY","ver_code":16,"ver_name":"1.4.5dev.dev_debug","os_type":"android","os_version":24,"tinker_version_error":"com.tencent.tinker.loader.TinkerRuntimeException: Tinker Exception:you must init TinkerPatch sdk first"}'>
+        <input type="submit" value="确定" id="sub">
+    </form>
+
+    <form action="/test/index" method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit" value="上传">
+    </form>
+</div>
+</body>
+</html>
